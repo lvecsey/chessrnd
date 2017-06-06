@@ -28,11 +28,11 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
 
 	xi = file + 1;
 	
-	for ( mask <<= 7; mask && xi < 8 && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 7) {
+	for ( mask <<= 7; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 7) {
 
+	  if (xi<8) xi++; else break;
+	  
 	  ret |= mask;
-
-	  xi++;
 	  
 	  if (opp_pieces & mask) break;
 
@@ -42,11 +42,11 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
 
 	xi = file - 1;
 	
-	for ( mask <<= 9; mask && xi >= 0 && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 9) {
+	for ( mask <<= 9; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 9) {
 
+	  if (xi >= 0) xi--; else break;
+	  
 	  ret |= mask;
-
-	  xi--;
 	  
 	  if (opp_pieces & mask) break;
 
@@ -56,11 +56,11 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
 
 	xi = file - 1;
 	
-	for ( mask >>= 7; mask && xi >= 0 && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 7) {
+	for ( mask >>= 7; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 7) {
 
+	  if (xi >= 0) xi--; else break;
+	  
 	  ret |= mask;
-
-	  xi--;
 	  
 	  if (opp_pieces & mask) break;
 
@@ -70,12 +70,12 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
 
 	xi = file + 1;
 	
-	for ( mask >>= 9; mask && xi < 8 && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 9) {
+	for ( mask >>= 9; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 9) {
 
+	  if (xi < 8) xi++; else break;
+	  
 	  ret |= mask;
 
-	  xi++;
-	  
 	  if (opp_pieces & mask) break;
 
 	}
