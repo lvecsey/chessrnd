@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define gtinrange(x) ( (x) >= 0UL && (x) < 64UL )
-
 uint64_t movement_queen(uint64_t queen, uint64_t totalpop, uint64_t opp_pieces) {
 
   uint64_t ret = 0;
@@ -41,7 +39,7 @@ uint64_t movement_queen(uint64_t queen, uint64_t totalpop, uint64_t opp_pieces) 
 	  if (xi < 8) xi++; else break;
 	  
 	  ret |= mask;
-
+	  
 	  if (opp_pieces & mask) break;
 
 	}
@@ -52,10 +50,10 @@ uint64_t movement_queen(uint64_t queen, uint64_t totalpop, uint64_t opp_pieces) 
 	
 	for ( mask <<= 9; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 9) {
 
-	  if (xi > 0) xi--; else break;
-	  
 	  ret |= mask;
 
+	  if (xi > 0) xi--; else break;
+	  
 	  if (opp_pieces & mask) break;
 
 	}
@@ -69,7 +67,7 @@ uint64_t movement_queen(uint64_t queen, uint64_t totalpop, uint64_t opp_pieces) 
 	  if (xi > 0) xi--; else break;
 	  
 	  ret |= mask;
-
+	  
 	  if (opp_pieces & mask) break;
 
 	}
@@ -83,7 +81,7 @@ uint64_t movement_queen(uint64_t queen, uint64_t totalpop, uint64_t opp_pieces) 
 	  if (xi < 8) xi++; else break;
 	  
 	  ret |= mask;
-
+	  
 	  if (opp_pieces & mask) break;
 
 	}
