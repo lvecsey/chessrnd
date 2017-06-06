@@ -30,4 +30,6 @@ long int count_nodes(struct ml *base);
 
 int piece_descr(long int ptype);
 
+int remove_entry(struct ml *base, struct ml *entry);
+
 #endif

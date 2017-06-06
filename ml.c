@@ -78,6 +78,8 @@ int add_mlspecific(struct ml *base, uint64_t *pieceStart, uint64_t pieceloc, lon
     mask >>= 1UL;
 
   }
+
+  return 0;
   
 }
 
@@ -130,4 +132,22 @@ int delete_list(struct ml *base) {
   
   return 0;
 
+}
+
+int remove_entry(struct ml *base, struct ml *entry) {
+
+  struct ml *pn = base;
+
+  while (pn->next != entry) {
+
+    if (pn->next == NULL) break;
+
+    pn = pn->next;
+    
+  }
+
+  free(pn->next);
+  
+  return 0;
+  
 }
