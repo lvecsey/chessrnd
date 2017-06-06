@@ -16,7 +16,7 @@
 
 #include "show_bitmask.h"
 
-uint64_t wmatch_bishop = 0b0000000000000000000000000000000000000000000000000000010000000000;
+uint64_t wmatch_bishop = 0b0000000000000000100000010100001000100100100110010101101000000000;
 
 int main(int argc, char *argv[]) {
 
@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
   game.bl.queens = piecemask_bqueen;
 
   game.wh.pawns = bitmask_change(game.wh.pawns, "f2f3");
+  game.wh.pawns = bitmask_change(game.wh.pawns, "c2c3");  
   
   base->next = NULL;
     
