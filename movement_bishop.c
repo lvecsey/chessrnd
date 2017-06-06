@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define gtinrange(x) ( (x) >= 0UL && (x) < 64UL )
-
 uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces) {
 
   uint64_t ret = 0;
@@ -13,14 +11,8 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
 
   long int bitno;
 
-  long int bitnext;
-
-  long int is_gts[8];
-
   uint64_t mask;
   
-  long int bitnexts[8];
-
   long int j;
 
   long int xi, yi;
@@ -34,50 +26,66 @@ uint64_t movement_bishop(uint64_t bishop, uint64_t totalpop, uint64_t opp_pieces
       
       if (bishop & mask) {
 
-	for ( mask <<= 7; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 7) {
-
-	  ret |= mask;
-
-	  if (opp_pieces & mask) break;
-
-	}
-
-	mask = (1ULL << bitno);
-
-	for ( mask <<= 9; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 9) {
-
-	  ret |= mask;
-
-	  if (opp_pieces & mask) break;
-
-	}
-
-	mask = (1ULL << bitno);
-
-	for ( mask >>= 7; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 7) {
-
-	  ret |= mask;
-
-	  if (opp_pieces & mask) break;
-
-	}
-
-	mask = (1ULL << bitno);
-
-	for ( mask >>= 9; mask && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 9) {
-
-	  ret |= mask;
-
-	  if (opp_pieces & mask) break;
-
-	}
+	xi = file + 1;
 	
+	for ( mask <<= 7; mask && xi < 8 && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 7) {
+
+	  ret |= mask;
+
+	  xi++;
+	  
+	  if (opp_pieces & mask) break;
+
+	}
+
+	mask = (1ULL << bitno);
+
+	xi = file - 1;
+	
+	for ( mask <<= 9; mask && xi >= 0 && (!(totalpop&mask) || (opp_pieces & mask)); mask <<= 9) {
+
+	  ret |= mask;
+
+	  xi--;
+	  
+	  if (opp_pieces & mask) break;
+
+	}
+
+	mask = (1ULL << bitno);
+
+	xi = file - 1;
+	
+	for ( mask >>= 7; mask && xi >= 0 && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 7) {
+
+	  ret |= mask;
+
+	  xi--;
+	  
+	  if (opp_pieces & mask) break;
+
+	}
+
+	mask = (1ULL << bitno);
+
+	xi = file + 1;
+	
+	for ( mask >>= 9; mask && xi < 8 && (!(totalpop&mask) || (opp_pieces & mask)); mask >>= 9) {
+
+	  ret |= mask;
+
+	  xi++;
+	  
+	  if (opp_pieces & mask) break;
+
+	}
+
 	return ret;
 	
       }
     }
   }
-  
+
   return ret;
   
 }
