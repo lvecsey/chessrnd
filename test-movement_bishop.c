@@ -60,8 +60,10 @@ int main(int argc, char *argv[]) {
   game.bl.king = piecemask_bking;
   game.bl.queens = piecemask_bqueen;
 
-  game.wh.pawns = bitmask_change(game.wh.pawns, "f2f3");
-  game.wh.pawns = bitmask_change(game.wh.pawns, "c2c3");  
+  game.wh.pawns = bitmask_change(game.wh.pawns, "b2b3");
+  game.wh.pawns = bitmask_change(game.wh.pawns, "d2d3");
+  game.wh.pawns = bitmask_change(game.wh.pawns, "e2e3");
+  game.wh.pawns = bitmask_change(game.wh.pawns, "g2g3");    
   
   base->next = NULL;
     
