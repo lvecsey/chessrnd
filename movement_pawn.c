@@ -1,4 +1,6 @@
 
+#include <stdio.h>
+
 #include <stdint.h>
 
 #include "fill_rankfile.h"
@@ -9,7 +11,13 @@ uint64_t movement_wpawn(uint64_t wpawn, uint64_t totalpop, uint64_t blackpieces)
 
   long int start_rank, start_file;
 
-  fill_rankfile(wpawn, &start_rank, &start_file);
+  int retval;
+  
+  retval = fill_rankfile(wpawn, &start_rank, &start_file);
+  if (retval == -1) {
+    fprintf(stderr, "%s: Cannot set fill_rankfile.\n", __FUNCTION__);
+    return -1;
+  }
   
   if ( (wpawn<<8) || (wpawn<<16) ) {
 
@@ -47,7 +55,13 @@ uint64_t movement_bpawn(uint64_t bpawn, uint64_t totalpop, uint64_t whitepieces)
 
   long int start_rank, start_file;
 
-  fill_rankfile(bpawn, &start_rank, &start_file);
+  int retval;
+  
+  retval = fill_rankfile(bpawn, &start_rank, &start_file);
+  if (retval == -1) {
+    fprintf(stderr, "%s: Cannot set fill_rankfile.\n", __FUNCTION__);
+    return -1;
+  }
   
   if ( (bpawn>>8) || (bpawn>>16) ) {
 
