@@ -34,7 +34,16 @@ int gameset(basegame_t *game) {
   game->bl.queens = piecemask_bqueen;
 
   retval = init_pieceloc2(&game->wh2);
+  if (retval==-1) {
+    fprintf(stderr, "%s: Memory allocation failure.\n", __FUNCTION__);
+    return -1;
+  }
+
   retval = init_pieceloc2(&game->bl2);  
+  if (retval==-1) {
+    fprintf(stderr, "%s: Memory allocation failure.\n", __FUNCTION__);
+    return -1;
+  }
 
   game->wh2.king = game->wh.king;
 
@@ -71,7 +80,7 @@ int gameset(basegame_t *game) {
   }
 
   for (n = 0; n < 64; n++) {
-    game->positions[n] = (pos_t) { .ptype = 0, .ploc = NULL };
+    game->positions[n] = (pos_t) { .ptype = EPIECE, .ploc = NULL };
   }
   
   {
