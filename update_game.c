@@ -12,8 +12,6 @@ uint64_t bitmask_change(uint64_t start, char *strbuf) {
 
   uint64_t ret;
 
-  uint64_t mask;
-  
   long int start_rank, start_file;
   long int dest_rank, dest_file;
 
@@ -29,7 +27,9 @@ uint64_t bitmask_change(uint64_t start, char *strbuf) {
   bitno = start_rank * 8 + (7 - start_file);
   bitnext = dest_rank * 8 + (7 - dest_file);  
 
-  ret = (1ULL << bitnext);
+  ret = start;
+  ret &= ~(1ULL << bitno);
+  ret |= (1ULL << bitnext);
   
   return ret;
   
