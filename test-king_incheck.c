@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
   
   retval = gameset(&game);
   if (retval == -1) {
-    fprintf("Trouble with call to gameset.\n");
+    fprintf(stderr, "Trouble with call to gameset.\n");
     return -1;
   }
   
