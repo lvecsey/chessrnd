@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define gtinrange(x) ( (x) >= 0UL && (x) < 64UL )
-
 uint64_t movement_rook(uint64_t rook, uint64_t totalpop, uint64_t opp_pieces) {
 
   uint64_t ret = 0;
@@ -13,14 +11,10 @@ uint64_t movement_rook(uint64_t rook, uint64_t totalpop, uint64_t opp_pieces) {
 
   long int bitno;
 
-  long int bitnext;
-
   long int is_gts[8];
 
   uint64_t mask;
   
-  long int bitnexts[8];
-
   long int j;
 
   long int xi, yi;
@@ -111,7 +105,7 @@ uint64_t movement_rook(uint64_t rook, uint64_t totalpop, uint64_t opp_pieces) {
 	  }
 	  
 	}
-	
+
 	return ret;
 	
       }
