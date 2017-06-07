@@ -3,6 +3,6 @@
 
 #include "basegame.h"
 
-int king_incheck(basegame_t *game, long int ptype);
+int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long int ptype);
 
 #endif
