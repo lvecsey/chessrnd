@@ -35,6 +35,21 @@ uint64_t bitmask_change(uint64_t start, char *strbuf) {
   
 }
 
+uint64_t bitmask_singlechange(uint64_t start, char *strbuf) {
+
+  long int dest_rank, dest_file;
+
+  long int bitnext;
+
+  dest_file = strbuf[2] - 'a';
+  dest_rank = strbuf[3] - '1';
+  
+  bitnext = dest_rank * 8 + (7 - dest_file);  
+
+  return (1ULL << bitnext);
+  
+}
+
 int update_game(basegame_t *game, struct ml *pn, char *strbuf) {
 
   uint64_t sum;
@@ -43,23 +58,23 @@ int update_game(basegame_t *game, struct ml *pn, char *strbuf) {
 
   switch (pn->ptype) {
 
-  case WPAWN: *pn->pieceStart = bitmask_change(game->wh.pawns, strbuf); break;
-  case BPAWN: *pn->pieceStart = bitmask_change(game->bl.pawns, strbuf); break;
+  case WPAWN: *pn->pieceStart = bitmask_singlechange(game->wh.pawns, strbuf); break;
+  case BPAWN: *pn->pieceStart = bitmask_singlechange(game->bl.pawns, strbuf); break;
 
-  case WROOK: *pn->pieceStart = bitmask_change(game->wh.rooks, strbuf); break;
-  case BROOK: *pn->pieceStart = bitmask_change(game->bl.rooks, strbuf); break;
+  case WROOK: *pn->pieceStart = bitmask_singlechange(game->wh.rooks, strbuf); break;
+  case BROOK: *pn->pieceStart = bitmask_singlechange(game->bl.rooks, strbuf); break;
     
-  case WKNIGHT: *pn->pieceStart = bitmask_change(game->wh.knights, strbuf); break;
-  case BKNIGHT: *pn->pieceStart = bitmask_change(game->bl.knights, strbuf); break;
+  case WKNIGHT: *pn->pieceStart = bitmask_singlechange(game->wh.knights, strbuf); break;
+  case BKNIGHT: *pn->pieceStart = bitmask_singlechange(game->bl.knights, strbuf); break;
 
-  case WBISHOP: *pn->pieceStart = bitmask_change(game->wh.bishops, strbuf); break;
-  case BBISHOP: *pn->pieceStart = bitmask_change(game->bl.bishops, strbuf); break;
+  case WBISHOP: *pn->pieceStart = bitmask_singlechange(game->wh.bishops, strbuf); break;
+  case BBISHOP: *pn->pieceStart = bitmask_singlechange(game->bl.bishops, strbuf); break;
 
-  case WQUEEN: *pn->pieceStart = bitmask_change(game->wh.queens, strbuf); break;
-  case BQUEEN: *pn->pieceStart = bitmask_change(game->bl.queens, strbuf); break;
+  case WQUEEN: *pn->pieceStart = bitmask_singlechange(game->wh.queens, strbuf); break;
+  case BQUEEN: *pn->pieceStart = bitmask_singlechange(game->bl.queens, strbuf); break;
 
-  case WKING: *pn->pieceStart = bitmask_change(game->wh.king, strbuf); break;
-  case BKING: *pn->pieceStart = bitmask_change(game->bl.king, strbuf); break;
+  case WKING: *pn->pieceStart = bitmask_singlechange(game->wh.king, strbuf); break;
+  case BKING: *pn->pieceStart = bitmask_singlechange(game->bl.king, strbuf); break;
     
   }
 
