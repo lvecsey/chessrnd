@@ -3,7 +3,7 @@ CC=gcc
 
 CFLAGS=-Wall -O3 -g -pg
 
-all : chessrnd test-movement_knight test-movement_knight2 test-movement_knight3 test-update_game test-movement_knight2 test-gameset test-movement_bishop test-movement_queen test-movement_rook test-movement_rook2 test-movement_wpawn test-movement_wpawn2 test-movement_bpawn test-movement_king
+all : chessrnd test-movement_knight test-movement_knight2 test-movement_knight3 test-update_game test-movement_knight2 test-gameset test-movement_bishop test-movement_queen test-movement_rook test-movement_rook2 test-movement_wpawn test-movement_wpawn2 test-movement_bpawn test-movement_king test-king_incheck
 
 chessrnd : chessrnd.o ml.o basegame.o movement_pawn.o movement_knight.o show_bitmask.o fill_rankfile.o makemove.o update_game.o pieceloc2.o gameset.o pos.o clear_position.o movement_rook.o movement_king.o movement_bishop.o movement_queen.o king_incheck.o remove_checks.o set_position.o fill_stringbuf.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
@@ -15,6 +15,9 @@ test-movement_knight2 : test-movement_knight2.o movement_knight.o basegame.o sho
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 test-movement_knight3 : test-movement_knight3.o movement_knight.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
+
+test-king_incheck : test-king_incheck.o king_incheck.o movement_king.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o fill_rankfile.o remove_checks.o fill_stringbuf.o gameset.o pos.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 test-movement_bishop : test-movement_bishop.o movement_bishop.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o
