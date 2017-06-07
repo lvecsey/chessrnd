@@ -5,7 +5,7 @@
 
 #include "basegame.h"
 
-enum { WPAWN, BPAWN, WROOK, BROOK, WKNIGHT, BKNIGHT, WBISHOP, BBISHOP, WKING, BKING, WQUEEN, BQUEEN };
+enum { EPIECE, WPAWN, BPAWN, WROOK, BROOK, WKNIGHT, BKNIGHT, WBISHOP, BBISHOP, WKING, BKING, WQUEEN, BQUEEN };
 
 struct ml {
 
@@ -17,6 +17,8 @@ struct ml {
   struct ml *next;
 
 };
+
+int show_ml(struct ml *pn);
 
 int add_ml(struct ml *base, basegame_t *bg);
 
