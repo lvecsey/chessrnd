@@ -18,6 +18,8 @@
 
 #include "show_bitmask.h"
 
+#include "gameset.h"
+
 uint64_t wmatch_queen = 0b0000000000000000000000000000000110000010010001000010100000000000;
 
 int main(int argc, char *argv[]) {
@@ -47,23 +49,17 @@ int main(int argc, char *argv[]) {
     perror("malloc");
     return -1;
   }
+
+  retval = gameset(&game);
+  if (retval == -1) {
+    fprintf(stderr, "Trouble with call to gameset.\n");
+    return -1;
+  }
   
-  game.wh.pawns = piecemask_wpawn;
-  game.wh.rooks = piecemask_wrook;
-  game.wh.knights = piecemask_wknight;
-  game.wh.bishops = piecemask_wbishop;
-  game.wh.king = piecemask_wking;
-  game.wh.queens = piecemask_wqueen;
+  game.wh2.pawns[2] = bitmask_change(game.wh2.pawns[2], "c2c4");
+  game.wh2.pawns[4] = bitmask_change(game.wh2.pawns[3], "e2e4");  
 
-  game.bl.pawns = piecemask_bpawn;
-  game.bl.rooks = piecemask_brook;
-  game.bl.knights = piecemask_bknight;
-  game.bl.bishops = piecemask_bbishop;
-  game.bl.king = piecemask_bking;
-  game.bl.queens = piecemask_bqueen;
-
-  game.wh.pawns = bitmask_change(game.wh.pawns, "d2d4");
-  game.wh.pawns = bitmask_change(game.wh.pawns, "e2e4");
+  apply_game2(&game);
   
   base->next = NULL;
     
@@ -92,6 +88,8 @@ int main(int argc, char *argv[]) {
     queen = game.wh2.queens[j];
 
     if (!queen) continue;
+
+    show_bitmask(queen);
     
     queenmove = movement_queen(queen, totalpop, cs_black);
 
