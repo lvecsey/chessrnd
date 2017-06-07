@@ -18,7 +18,13 @@
 
 #include "king_incheck.h"
 
-uint64_t wmatch_king = 0b0000000000000000000000000000000000000000111000000000000000000000;
+#include "gameset.h"
+
+#include "movement_king.h"
+
+#include "remove_checks.h"
+
+uint64_t wmatch_king = 0b0000000000000000000000000110000010000000111000000000000000000000;  
   
 int main(int argc, char *argv[]) {
 
@@ -32,18 +38,12 @@ int main(int argc, char *argv[]) {
   uint64_t cs_white;
   uint64_t cs_black;
 
-  long int file, rank;
-
   long int counter;
 
   int retval;
 
-  uint64_t combined_kingmove;
-  
   struct ml *base = malloc(sizeof(struct ml));
 
-  long int j;
-  
   if (base==NULL) {
     perror("malloc");
     return -1;
@@ -72,8 +72,6 @@ int main(int argc, char *argv[]) {
   cs_white = collected_side(&game.wh);
   cs_black = collected_side(&game.bl);  
 
-  combined_kingmove = 0;
-
   {
     
     king = game.wh2.king;
@@ -81,20 +79,18 @@ int main(int argc, char *argv[]) {
     if (!king) return -1;
 
     show_bitmask(king);
+
+    show_bitmask(totalpop);
     
     kingmove = movement_king(king, totalpop, cs_black);
 
-    combined_kingmove |= kingmove;
-    
     show_bitmask(kingmove);
     
     retval = add_mlspecific(base, &game.wh2.king+0, kingmove, WKING);
       
   }
 
-  show_bitmask(combined_kingmove);
-  
-  if (combined_kingmove != wmatch_king) {
+  if (kingmove != wmatch_king) {
     printf("FAILURE");
     return -1;
   }
