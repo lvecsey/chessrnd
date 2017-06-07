@@ -38,6 +38,8 @@
 
 #include "clear_position.h"
 
+#include "king_incheck.h"
+
 int main(int argc, char *argv[]) {
 
   uint64_t totalpop;
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]) {
   
   long int moveno;
   
-  long int max_moves = 100;
+  long int max_moves = 200;
 
   long int selectno;
 
@@ -227,6 +229,8 @@ int main(int argc, char *argv[]) {
 	}
 
       }
+
+      retval = remove_checks(&game, BKING, base);
       
       counter = count_nodes(base);
       
@@ -391,6 +395,8 @@ int main(int argc, char *argv[]) {
 	}
 
       }
+
+      retval = remove_checks(&game, WKING, base);
       
       counter = count_nodes(base);
       
