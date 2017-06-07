@@ -52,10 +52,6 @@ uint64_t bitmask_singlechange(uint64_t start, char *strbuf) {
 
 int update_game(basegame_t *game, struct ml *pn, char *strbuf) {
 
-  uint64_t sum;
-
-  long int j;
-
   switch (pn->ptype) {
 
   case WPAWN: *pn->pieceStart = bitmask_singlechange(game->wh.pawns, strbuf); break;
@@ -77,7 +73,17 @@ int update_game(basegame_t *game, struct ml *pn, char *strbuf) {
   case BKING: *pn->pieceStart = bitmask_singlechange(game->bl.king, strbuf); break;
     
   }
+  
+  return 0;
 
+}
+
+int apply_game2(basegame_t *game) {
+
+  uint64_t sum;
+
+  long int j;
+  
   game->wh.king = game->wh2.king;
 
   sum = 0;
@@ -141,7 +147,7 @@ int update_game(basegame_t *game, struct ml *pn, char *strbuf) {
     sum |= game->bl2.pawns[j];
   }
   game->bl.pawns = sum;
-  
-  return 0;
 
+  return 0;
+  
 }
