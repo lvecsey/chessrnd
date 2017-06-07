@@ -50,6 +50,10 @@ int main(int argc, char *argv[]) {
   }
   
   retval = gameset(&game);
+  if (retval == -1) {
+    fprintf("Trouble with call to gameset.\n");
+    return -1;
+  }
   
   game.bl2.pawns[0] = bitmask_change(game.bl2.pawns[0], "a7a5");
 
