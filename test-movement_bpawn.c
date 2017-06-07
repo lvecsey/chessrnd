@@ -47,14 +47,14 @@ int main(int argc, char *argv[]) {
   game.wh.rooks = piecemask_wrook;
   game.wh.bishops = piecemask_wbishop;
   game.wh.knights = piecemask_wknight;
-  game.wh.kings = piecemask_wking;
+  game.wh.king = piecemask_wking;
   game.wh.queens = piecemask_wqueen;
 
   game.bl.pawns = piecemask_bpawn;
   game.bl.rooks = piecemask_brook;
   game.bl.bishops = piecemask_bbishop;
   game.bl.knights = piecemask_bknight;
-  game.bl.kings = piecemask_bking;
+  game.bl.king = piecemask_bking;
   game.bl.queens = piecemask_bqueen;
 
   base->next = NULL;
