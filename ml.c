@@ -8,12 +8,16 @@
 
 #include "ml.h"
 
+#include "show_bitmask.h"
+
 int show_ml(struct ml *pn) {
 
   printf("pn->ptype = %ld\n", pn->ptype);
   printf("pn->ploc = %lu\n", pn->ploc);
+  show_bitmask(pn->ploc);
   printf("pn->pieceStart = %p\n", pn->pieceStart);
   if (pn->pieceStart != NULL) {
+    show_bitmask(pn->pieceStart[0]);
     printf("pn->pieceStart[value] = %lu\n", pn->pieceStart[0]);
   }
 
