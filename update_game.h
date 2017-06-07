@@ -13,4 +13,6 @@ uint64_t bitmask_change(uint64_t start, char *strbuf);
 
 uint64_t bitmask_singlechange(uint64_t start, char *strbuf);
 
+int apply_game2(basegame_t *game);
+
 #endif
