@@ -3,6 +3,6 @@
 
 #include "pos.h"
 
-int clear_position(pos_t *positions, char *algebraic_dest);
+int clear_position(pos_t *positions, char *algebraic_coord);
 
 #endif
