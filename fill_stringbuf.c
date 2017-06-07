@@ -7,7 +7,7 @@
 
 #include "pos.h"
 
-int fill_stringbuf(struct ml *pn, char *strbuf) {
+int fill_stringbuf(struct ml *pn, char *strbuf, long int *out_destrank, long int *out_destfile) {
 
   long int start_rank, start_file;
 
@@ -33,6 +33,14 @@ int fill_stringbuf(struct ml *pn, char *strbuf) {
   strbuf[2] = 'a' + dest_file;
   strbuf[3] = '1' + dest_rank;
 
+  if (out_destrank != NULL) {
+    *out_destrank = dest_rank;
+  }
+
+  if (out_destfile != NULL) {
+    *out_destfile = dest_file;
+  }
+  
   return 0;
 
 }
