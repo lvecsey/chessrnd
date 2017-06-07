@@ -12,4 +12,6 @@ typedef struct {
 
 pos_t setpos(long int ptype, uint64_t *ploc);
 
+int show_positions(pos_t *positions);
+
 #endif
