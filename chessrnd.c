@@ -38,6 +38,8 @@
 
 #include "clear_position.h"
 
+#include "set_position.h"
+
 #include "king_incheck.h"
 
 int main(int argc, char *argv[]) {
@@ -270,7 +272,9 @@ int main(int argc, char *argv[]) {
 
       bytes_written = write(out_fd, strbuf, 4);
 
-      clear_position(game.positions, strbuf+2);
+      clear_position(game.positions, strbuf);
+
+      set_position(game.positions, strbuf+2, pn->ptype); 
       
       update_game(&game, pn, strbuf);
       
@@ -447,6 +451,8 @@ int main(int argc, char *argv[]) {
       bytes_written = write(out_fd, strbuf, 4);
 
       clear_position(game.positions, strbuf+2);
+
+      set_position(game.positions, strbuf+2, pn->ptype); 
       
       update_game(&game, pn, strbuf);
       
