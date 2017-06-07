@@ -28,7 +28,6 @@ int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_
   
   pdest->ploc = pieceStart;
   pdest->ptype = ptype;
-  pdest->ploc[0] = mask;
     
   return 0;
   
