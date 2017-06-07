@@ -8,6 +8,21 @@
 
 #include "ml.h"
 
+int show_ml(struct ml *pn) {
+
+  printf("pn->ptype = %ld\n", pn->ptype);
+  printf("pn->ploc = %lu\n", pn->ploc);
+  printf("pn->pieceStart = %p\n", pn->pieceStart);
+  if (pn->pieceStart != NULL) {
+    printf("pn->pieceStart[value] = %lu\n", pn->pieceStart[0]);
+  }
+
+  putchar('\n');
+
+  return 0;
+  
+}
+
 int piece_descr(long int ptype) {
 
   char *str = NULL;
@@ -90,7 +105,6 @@ long int count_nodes(struct ml *base) {
   struct ml *pn = base->next;
 
   while (pn != NULL) {
-    printf("pn->ptype = %ld\n", pn->ptype);
     counter++;
     pn = pn->next;
   }
@@ -146,8 +160,14 @@ int remove_entry(struct ml *base, struct ml *entry) {
     
   }
 
-  free(pn->next);
+  if (pn->next == entry) {
   
+    pn->next = entry->next;
+  
+    free(pn->next);
+
+  }
+    
   return 0;
   
 }
