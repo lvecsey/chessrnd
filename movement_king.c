@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define gtinrange(x) ( (x) >= 0UL && (x) < 64UL )
+#include "show_bitmask.h"
 
 uint64_t movement_king(uint64_t king, uint64_t totalpop, uint64_t opp_pieces) {
 
@@ -13,92 +13,80 @@ uint64_t movement_king(uint64_t king, uint64_t totalpop, uint64_t opp_pieces) {
 
   long int bitno;
 
-  long int bitnext;
-
-  long int is_gts[8];
-
-  uint64_t mask;
-  
-  long int bitnexts[8];
-
-  long int j;
-
-  long int xi, yi;
+  uint64_t mask, original_mask;
   
   for (rank = 7; rank >= 0; rank--) {
     for (file = 0; file < 8; file++) {
 
       bitno = rank*8+(7-file);
 
-      for (j = 0; j < 8; j++) is_gts[j] = 0;
-
-      mask = (1ULL << bitno);
+      original_mask = (1ULL << bitno);
       
-      if (king & mask) {
+      if (king & original_mask) {
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask <<= 1;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask >>= 1;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask <<= 8;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}	
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask >>= 8;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask <<= 9;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}	
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask <<= 7;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask >>= 9;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
 
-	mask = (1ULL << bitno);
-
+	mask = original_mask;
 	mask >>= 7;
+
 	if (! (totalpop & mask)) {
 	  ret |= mask;
 	}
-	
+
 	return ret;
 	
       }
     }
   }
   
-  return ret;
+  return king;
   
 }
 
