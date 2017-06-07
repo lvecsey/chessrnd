@@ -25,4 +25,6 @@ typedef struct {
 
 int init_pieceloc2(pieceloc2_t *pl2);
 
+int show_pieceloc2(pieceloc2_t *pl2);
+
 #endif
