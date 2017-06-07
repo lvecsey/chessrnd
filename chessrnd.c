@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -42,6 +43,10 @@
 
 #include "king_incheck.h"
 
+#include "remove_checks.h"
+
+#include "fill_stringbuf.h"
+
 int main(int argc, char *argv[]) {
 
   uint64_t totalpop;
@@ -68,7 +73,6 @@ int main(int argc, char *argv[]) {
 
   uint64_t pieceStart;
 
-  long int start_file, start_rank;
   long int dest_file, dest_rank;
   
   char strbuf[4];
@@ -97,6 +101,10 @@ int main(int argc, char *argv[]) {
   }
 
   retval = gameset(&game);  
+  if (retval==-1) {
+    fprintf(stderr, "%s: Trouble with initializing basic chess board.\n", __FUNCTION__);
+    return -1;
+  }
   
   for (moveno = 0; moveno < max_moves; moveno++) {
 
@@ -110,7 +118,11 @@ int main(int argc, char *argv[]) {
 
       cs_white = collected_side(&game.wh);
       cs_black = collected_side(&game.bl);  
-  
+
+      if (totalpop == (game.wh.king | game.bl.king)) {
+	fprintf(stderr, "%s: Reached draw, just kings are left.\n", __FUNCTION__);
+      }
+      
       {
 	uint64_t pawnmove;
 
@@ -233,11 +245,20 @@ int main(int argc, char *argv[]) {
       }
 
       retval = remove_checks(&game, BKING, base);
+      if (retval==-1) {
+	printf("Trouble removing potential moves that leave king in check.\n");
+	return -1;
+      }
       
       counter = count_nodes(base);
       
       printf("%s: Counted %ld moves, for black.\n", __FUNCTION__, counter);
-  
+
+      if (!counter) {
+	printf("Leaving, no moves to make.\n");
+	return 0;
+      }
+      
       bytes_read = read(rnd_fd, &rnds, sizeof(uint64_t));
       if (bytes_read != sizeof(uint64_t)) {
 	perror("read");
@@ -250,33 +271,53 @@ int main(int argc, char *argv[]) {
       }
 
       pn = fetch_move(base, selectno);
-      fill_rankfile(*pn->pieceStart, &start_rank, &start_file);
-      fill_rankfile(pn->ploc, &dest_rank, &dest_file);	
-
-      strbuf[0] = 'a' + start_file;
-      strbuf[1] = '1' + start_rank;
-      strbuf[2] = 'a' + dest_file;
-      strbuf[3] = '1' + dest_rank;
+      
+      retval = fill_stringbuf(pn, strbuf, &dest_rank, &dest_file);
+      if (retval==-1) {
+	fprintf(stderr, "%s: Trouble filling coordinate pair.\n", __FUNCTION__);
+	return -1;
+      }
       
       {
 	pos_t pos = game.positions[dest_rank*8+dest_file];
 
-	if (pos.ptype == BKING) {
-	  fprintf(stderr, "%s: King randomly captured. Move %.4s", __FUNCTION__, strbuf);
-	  exit(EXIT_SUCCESS);
+	if (pn->ptype != BKING && pos.ptype == BKING) {
+	  debug_out(&game, pn);
+	  fprintf(stderr, "%s: Black king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
+	  return 0;
+	}
+	
+      }
+
+      makemove_desc(pn);
+      
+      if (strbuf[0] == strbuf[2] && strbuf[1] == strbuf[3]) {
+	debug_out(&game, pn);
+	fprintf(stderr, "%s: Not moving to a different square.\n", __FUNCTION__);
+	return -1;
+      }     
+
+      bytes_written = write(out_fd, strbuf, 4);
+
+      assert(pn->pieceStart != NULL);
+      
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart); 
+
+      {
+	long int bitno = (dest_rank * 8 + (7 - dest_file));
+	uint64_t mask = 1ULL << bitno;
+
+	if (cs_white & mask) {
+	  clear_position(game.positions, strbuf+2);
 	}
 	
       }
       
-      makemove_desc(pn);
-
-      bytes_written = write(out_fd, strbuf, 4);
-
-      clear_position(game.positions, strbuf);
-
-      set_position(game.positions, strbuf+2, pn->ptype); 
-      
       update_game(&game, pn, strbuf);
+
+      apply_game2(&game);
+      
+      assert(game.bl.king);
       
     }
 
@@ -288,7 +329,11 @@ int main(int argc, char *argv[]) {
 
       cs_white = collected_side(&game.wh);
       cs_black = collected_side(&game.bl);  
-  
+
+      if (totalpop == (game.wh.king | game.bl.king)) {
+	fprintf(stderr, "%s: Reached draw, just kings are left.\n", __FUNCTION__);
+      }
+      
       {
 	uint64_t pawnmove;
 
@@ -411,11 +456,20 @@ int main(int argc, char *argv[]) {
       }
 
       retval = remove_checks(&game, WKING, base);
-      
+      if (retval==-1) {
+	printf("Trouble removing potential moves that leave king in check.\n");
+	return -1;
+      }
+
       counter = count_nodes(base);
       
       printf("%s: Counted %ld moves, for white.\n", __FUNCTION__, counter);
-  
+
+      if (!counter) {
+	printf("Leaving, no moves to make.\n");
+	return 0;
+      }
+      
       bytes_read = read(rnd_fd, &rnds, sizeof(uint64_t));
       if (bytes_read != sizeof(uint64_t)) {
 	perror("read");
@@ -428,33 +482,53 @@ int main(int argc, char *argv[]) {
       }
 
       pn = fetch_move(base, selectno);
-      fill_rankfile(*pn->pieceStart, &start_rank, &start_file);
-      fill_rankfile(pn->ploc, &dest_rank, &dest_file);	
 
-      strbuf[0] = 'a' + start_file;
-      strbuf[1] = '1' + start_rank;
-      strbuf[2] = 'a' + dest_file;
-      strbuf[3] = '1' + dest_rank;
+      retval = fill_stringbuf(pn, strbuf, &dest_rank, &dest_file);
+      if (retval==-1) {
+	fprintf(stderr, "%s: Trouble filling coordinate pair.\n", __FUNCTION__);
+	return -1;
+      }
       
       {
 	pos_t pos = game.positions[dest_rank*8+dest_file];
 
-	if (pos.ptype == WKING) {
-	  fprintf(stderr, "%s: King randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
-	  exit(EXIT_SUCCESS);
+	if (pn->ptype != WKING && pos.ptype == WKING) {
+	  debug_out(&game, pn);
+	  fprintf(stderr, "%s: White king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
+	  return 0;
 	}
 	
       }      
-      
-      makemove_desc(pn);
 
+      makemove_desc(pn);
+      
+      if (strbuf[0] == strbuf[2] && strbuf[1] == strbuf[3]) {
+	debug_out(&game, pn);
+	fprintf(stderr, "%s: Not moving to a different square.\n", __FUNCTION__);
+	return -1;
+      }     
+      
       bytes_written = write(out_fd, strbuf, 4);
 
-      clear_position(game.positions, strbuf+2);
+      assert(pn->pieceStart != NULL);
+      
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart); 
 
-      set_position(game.positions, strbuf+2, pn->ptype); 
+      {
+	long int bitno = (dest_rank * 8 + (7 - dest_file));
+	uint64_t mask = 1ULL << bitno;
+
+	if (cs_black & mask) {
+	  clear_position(game.positions, strbuf+2);
+	}
+	
+      }
       
       update_game(&game, pn, strbuf);
+
+      apply_game2(&game);
+      
+      assert(game.wh.king);
       
     }
 
