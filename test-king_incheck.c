@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
   
   counter = count_nodes(base);
       
-  fprintf(stderr, "%s: Counted %ld moves, for black.\n", __FUNCTION__, counter);
+  fprintf(stderr, "%s: Counted %ld moves, for white.\n", __FUNCTION__, counter);
 
   printf("SUCCESS");
   
