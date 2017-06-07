@@ -27,14 +27,37 @@ int makemove_desc(struct ml *pn) {
 
   long int start_rank, start_file;
 
-  printf("pn->ptype = %ld\n", pn->ptype);
-  printf("pn->ploc = %lu\n", pn->ploc);
+  int retval;
+  
+  printf("pn->ptype=%ld pn->ploc=%lu\n", pn->ptype, pn->ploc);
 
-  fill_rankfile(*pn->pieceStart, &start_rank, &start_file);
-  fill_rankfile(pn->ploc, &dest_rank, &dest_file);	
+  retval = fill_rankfile(*pn->pieceStart, &start_rank, &start_file);
+  if (retval==-1) {
+    fprintf(stderr, "%s: Trouble getting rankfile for pn=%p, pn->pieceStart\n", __FUNCTION__, pn);
+    return -1;
+  }
+
+  retval = fill_rankfile(pn->ploc, &dest_rank, &dest_file);	
+  if (retval==-1) {
+    fprintf(stderr, "%s: Trouble getting rankfile for pn=%p, pn->ploc\n", __FUNCTION__, pn);
+    return -1;
+  }
+
+  printf("start_rank=%ld start_file=%ld\n", start_rank, start_file);
+  
+  if (start_rank < 0) {
+    start_rank = -start_rank;
+  }
+
+  if (start_file < 0) {
+    start_file = -start_file;
+  }
+
+  start_rank %= 8;
+  start_file %= 8;
   
   printf("PIECE MOVE "); piece_descr(pn->ptype); putchar('\n');
-  printf("Moving from %c%c to %c%c\n", 'a' + start_file, '1' + start_rank, 'a' + dest_file, '1' + dest_rank);
+  printf("Moving from %c%c to %c%c\n", 'a' + (int) start_file, '1' + (int) start_rank, 'a' + (int) dest_file, '1' + (int) dest_rank);
 
   return 0;
   
