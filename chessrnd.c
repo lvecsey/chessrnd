@@ -255,7 +255,17 @@ int main(int argc, char *argv[]) {
       strbuf[1] = '1' + start_rank;
       strbuf[2] = 'a' + dest_file;
       strbuf[3] = '1' + dest_rank;
+      
+      {
+	pos_t pos = game.positions[dest_rank*8+dest_file];
 
+	if (pos.ptype == BKING) {
+	  fprintf(stderr, "%s: King randomly captured. Move %.4s", __FUNCTION__, strbuf);
+	  exit(EXIT_SUCCESS);
+	}
+	
+      }
+      
       makemove_desc(pn);
 
       bytes_written = write(out_fd, strbuf, 4);
@@ -421,6 +431,16 @@ int main(int argc, char *argv[]) {
       strbuf[1] = '1' + start_rank;
       strbuf[2] = 'a' + dest_file;
       strbuf[3] = '1' + dest_rank;
+      
+      {
+	pos_t pos = game.positions[dest_rank*8+dest_file];
+
+	if (pos.ptype == WKING) {
+	  fprintf(stderr, "%s: King randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
+	  exit(EXIT_SUCCESS);
+	}
+	
+      }      
       
       makemove_desc(pn);
 
