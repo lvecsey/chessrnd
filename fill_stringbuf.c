@@ -14,6 +14,11 @@ int fill_stringbuf(struct ml *pn, char *strbuf, long int *out_destrank, long int
   long int dest_rank, dest_file;
 
   int retval;
+
+  if (!*pn->pieceStart) {
+    fprintf(stderr, "%s: This move has an empty pieceStart.\n", __FUNCTION__);
+    return -1;
+  }
   
   retval = fill_rankfile(*pn->pieceStart, &start_rank, &start_file);
   if (retval==-1) {
