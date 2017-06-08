@@ -17,7 +17,7 @@ test-movement_knight2 : test-movement_knight2.o movement_knight.o basegame.o sho
 test-movement_knight3 : test-movement_knight3.o movement_knight.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
-test-king_incheck : test-king_incheck.o king_incheck.o movement_king.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o fill_rankfile.o remove_checks.o fill_stringbuf.o gameset.o pos.o
+test-king_incheck : test-king_incheck.o king_incheck.o movement_king.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o fill_rankfile.o remove_checks.o fill_stringbuf.o gameset.o pos.o set_position.o clear_position.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 test-movement_bishop : test-movement_bishop.o movement_bishop.o basegame.o show_bitmask.o ml.o pieceloc2.o update_game.o
@@ -53,7 +53,7 @@ test-movement_wpawn2 : test-movement_wpawn2.o movement_pawn.o basegame.o show_bi
 test-movement_bpawn : test-movement_bpawn.o movement_pawn.o basegame.o show_bitmask.o ml.o update_game.o fill_rankfile.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
-test-gameset : test-gameset.o gameset.o basegame.o pieceloc2.o pos.o
+test-gameset : test-gameset.o gameset.o basegame.o pieceloc2.o pos.o show_bitmask.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 clean :
