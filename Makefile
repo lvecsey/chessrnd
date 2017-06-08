@@ -50,7 +50,7 @@ test-movement_wpawn : test-movement_wpawn.o movement_pawn.o basegame.o show_bitm
 test-movement_wpawn2 : test-movement_wpawn2.o movement_pawn.o basegame.o show_bitmask.o ml.o update_game.o fill_rankfile.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
-test-movement_bpawn : test-movement_bpawn.o movement_pawn.o basegame.o show_bitmask.o ml.o update_game.o fill_rankfile.o
+test-movement_bpawn : test-movement_bpawn.o movement_pawn.o basegame.o show_bitmask.o ml.o update_game.o fill_rankfile.o gameset.o pos.o pieceloc2.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 test-gameset : test-gameset.o gameset.o basegame.o pieceloc2.o pos.o show_bitmask.o
