@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
   
   long int moveno;
   
-  long int max_moves = 200;
+  long int max_moves = 500;
 
   long int selectno;
 
@@ -244,7 +244,7 @@ int main(int argc, char *argv[]) {
 
       }
 
-      retval = remove_checks(&game, BKING, base);
+      retval = remove_checks(&game, BKING, base, moveno);
       if (retval==-1) {
 	printf("Trouble removing potential moves that leave king in check.\n");
 	return -1;
@@ -282,9 +282,11 @@ int main(int argc, char *argv[]) {
 	pos_t pos = game.positions[dest_rank*8+dest_file];
 
 	if (pn->ptype != BKING && pos.ptype == BKING) {
-	  debug_out(&game, pn);
-	  fprintf(stderr, "%s: Black king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
-	  return 0;
+	  if (pos.moveno_history == moveno) {
+	    debug_out(&game, pn);
+	    fprintf(stderr, "%s: Black king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
+	    return 0;
+	  }
 	}
 	
       }
@@ -301,7 +303,7 @@ int main(int argc, char *argv[]) {
 
       assert(pn->pieceStart != NULL);
       
-      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart); 
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno); 
 
       {
 	long int bitno = (dest_rank * 8 + (7 - dest_file));
@@ -455,7 +457,7 @@ int main(int argc, char *argv[]) {
 
       }
 
-      retval = remove_checks(&game, WKING, base);
+      retval = remove_checks(&game, WKING, base, moveno);
       if (retval==-1) {
 	printf("Trouble removing potential moves that leave king in check.\n");
 	return -1;
@@ -493,11 +495,12 @@ int main(int argc, char *argv[]) {
 	pos_t pos = game.positions[dest_rank*8+dest_file];
 
 	if (pn->ptype != WKING && pos.ptype == WKING) {
-	  debug_out(&game, pn);
-	  fprintf(stderr, "%s: White king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
-	  return 0;
-	}
-	
+	  if (pos.moveno_history == moveno) {
+	    debug_out(&game, pn);
+	    fprintf(stderr, "%s: White king randomly captured. Move %.4s.\n", __FUNCTION__, strbuf);
+	    return 0;
+	  }
+	}	
       }      
 
       makemove_desc(pn);
@@ -512,7 +515,7 @@ int main(int argc, char *argv[]) {
 
       assert(pn->pieceStart != NULL);
       
-      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart); 
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno); 
 
       {
 	long int bitno = (dest_rank * 8 + (7 - dest_file));
