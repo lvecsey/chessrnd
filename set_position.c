@@ -5,7 +5,7 @@
 
 #include "pos.h"
 
-int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_t *pieceStart) {
+int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_t *pieceStart, long int moveno) {
 
   long int dest_rank, dest_file;
 
@@ -25,6 +25,8 @@ int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_
   mask = (1ULL << bitno);
   
   printf("%s: Updating position %.02s to ptype=%ld\n", __FUNCTION__, algebraic_dest, ptype);
+
+  pdest->moveno_history = moveno;
   
   pdest->ploc = pieceStart;
   pdest->ptype = ptype;

@@ -3,6 +3,6 @@
 
 #include "pos.h"
 
-int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_t *pieceStart);
+int set_position(pos_t *positions, char *algebraic_dest, long int ptype, uint64_t *pieceStart, long int moveno);
 
 #endif
