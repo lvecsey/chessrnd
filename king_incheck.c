@@ -9,6 +9,8 @@
 
 #include "fill_rankfile.h"
 
+#include "king_incheck.h"
+
 int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long int ptype) {
 
   long int rank, file;
@@ -22,6 +24,8 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
   uint64_t mask, original_mask;
 
   pos_t pos;
+
+  show_positions_indepth(game->positions);
   
   switch(ptype) {
   case WKING:
@@ -29,7 +33,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
     retval = fill_rankfile(game->wh.king, &rank, &file);
     if (retval == -1) {
       fprintf(stderr, "%s: Leaving because cannot set rank file.\n", __FUNCTION__);
-      return -1;
+      return KIC_ERROR;
     }
     
     bitno = (rank * 8 + (7 - file));
@@ -43,7 +47,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return 1;
+	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return KIC_POS;
 	}
 	break;
       }
@@ -56,7 +60,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return 1;
+	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return KIC_POS;
 	}
 	break;
       }
@@ -69,7 +73,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return 1;
+	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return KIC_POS;
 	}
 	break;
       }
@@ -82,7 +86,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return 1;
+	  if (pos.ptype == BQUEEN || pos.ptype == BROOK) return KIC_POS;
 	}
 	break;
       }
@@ -95,7 +99,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
     retval = fill_rankfile(game->bl.king, &rank, &file);
     if (retval==-1) {
       fprintf(stderr, "%s: Leaving because cannot set rank file.\n", __FUNCTION__);
-      return -1;
+      return KIC_ERROR;
     }
     
     bitno = (rank * 8 + (7 - file));
@@ -109,7 +113,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return 1;
+	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return KIC_POS;
 	}
 	break;
       }
@@ -122,7 +126,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return 1;
+	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return KIC_POS;
 	}
 	break;
       }
@@ -135,7 +139,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return 1;
+	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return KIC_POS;
 	}
 	break;
       }
@@ -148,7 +152,7 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
       if (totalpop & mask) {
 	if (opp_pieces & mask) {
 	  pos = game->positions[yi*8+file];
-	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return 1;
+	  if (pos.ptype == WQUEEN || pos.ptype == WROOK) return KIC_POS;
 	}
 	break;
       }
@@ -157,6 +161,6 @@ int king_incheck(basegame_t *game, uint64_t totalpop, uint64_t opp_pieces, long 
     break;
   }
   
-  return 0;
+  return KIC_NEG;
 
 }
