@@ -42,6 +42,8 @@ int main(int argc, char *argv[]) {
 
   int retval;
 
+  long int moveno = 0;
+  
   struct ml *base = malloc(sizeof(struct ml));
 
   if (base==NULL) {
@@ -99,7 +101,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  retval = remove_checks(&game, WKING, base);
+  retval = remove_checks(&game, WKING, base, moveno);
   if (retval==-1) {
     printf("Trouble removing potential moves that leave king in check.\n");
     return -1;
