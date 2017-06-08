@@ -5,6 +5,6 @@
 
 #include "ml.h"
 
-int remove_checks(basegame_t *game, long int ptype, struct ml *base);
+int remove_checks(basegame_t *game, long int ptype, struct ml *base, long int moveno);
 
 #endif

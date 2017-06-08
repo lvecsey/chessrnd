@@ -23,7 +23,7 @@
 #include "set_position.h"
 #include "clear_position.h"
 
-int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
+int remove_checks(basegame_t *game, long int ptype, struct ml *base, long int moveno) {
 
   struct ml *pn = base->next;
 
@@ -35,10 +35,6 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
 
   gamestate_t gamestate;
 
-  char strbuf[4];
-
-  int retval;
-
   int black_side = (ptype == BKING);
 
   double percent;
@@ -46,9 +42,15 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
   long int counter = 0;
 
   long int incheck_count = 0;
+
+  char strbuf[4];
+  
+  int retval;
   
   while (pn!=NULL) {
 
+    printf("pn=%p incheck_count=%ld counter=%ld\n", pn, incheck_count, counter);
+    
     updated.wh = game->wh;
     updated.bl = game->bl;
 
@@ -62,8 +64,10 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
     
     //    update_game(&updated, pn, strbuf);
 
-    set_position(updated.positions, strbuf+2, pn->ptype, pn->pieceStart); 
-       
+    set_position(updated.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno); 
+
+    clear_position(updated.positions, strbuf+2);
+    
     gamestate.totalpop = total_population(&updated.wh, &updated.bl);
     gamestate.opp_pieces = collected_side(black_side ? &updated.bl : &updated.wh);
 
@@ -72,14 +76,14 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
       uint64_t mask = 1ULL << bitno;
 
       uint64_t cs_side = black_side ? collected_side(&updated.bl) : collected_side(&updated.wh);
-      
+
       if ( cs_side & mask) {
 	clear_position(updated.positions, strbuf+2);
       }
 	
     }
 
-    if (king_incheck(&updated, gamestate.totalpop, gamestate.opp_pieces, ptype)) {
+    if (KIC_POS == king_incheck(&updated, gamestate.totalpop, gamestate.opp_pieces, ptype)) {
       printf("Move would put king into check. Removing it.\n");
       entry = pn;
       entry->ploc = 0;
@@ -97,8 +101,8 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base) {
     
   }
 
-  percent = ((double) incheck_count) / counter;
-  printf("Percent of legal moves considered, that are in check: %.02f\n", percent);
+  percent = incheck_count; percent /= counter;
+  printf("Percent of legal moves considered, that are in check: %.02f\n", 100.0 * percent);
   
   return 0;
 
