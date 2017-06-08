@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
   
   long int moveno;
   
-  long int max_moves = 500;
+  long int max_moves = 1000;
 
   long int selectno;
 
@@ -244,6 +244,8 @@ int main(int argc, char *argv[]) {
 
       }
 
+      retval = ensure_boardmove(base, totalpop, cs_white);
+      
       retval = remove_checks(&game, BKING, base, moveno);
       if (retval==-1) {
 	printf("Trouble removing potential moves that leave king in check.\n");
@@ -303,7 +305,8 @@ int main(int argc, char *argv[]) {
 
       assert(pn->pieceStart != NULL);
       
-      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno); 
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno);       
+      update_game(&game, pn, strbuf);
 
       {
 	long int bitno = (dest_rank * 8 + (7 - dest_file));
@@ -315,8 +318,6 @@ int main(int argc, char *argv[]) {
 	
       }
       
-      update_game(&game, pn, strbuf);
-
       apply_game2(&game);
       
       assert(game.bl.king);
@@ -457,6 +458,8 @@ int main(int argc, char *argv[]) {
 
       }
 
+      retval = ensure_boardmove(base, totalpop, cs_black);
+      
       retval = remove_checks(&game, WKING, base, moveno);
       if (retval==-1) {
 	printf("Trouble removing potential moves that leave king in check.\n");
@@ -515,7 +518,8 @@ int main(int argc, char *argv[]) {
 
       assert(pn->pieceStart != NULL);
       
-      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno); 
+      set_position(game.positions, strbuf+2, pn->ptype, pn->pieceStart, moveno);       
+      update_game(&game, pn, strbuf);
 
       {
 	long int bitno = (dest_rank * 8 + (7 - dest_file));
@@ -527,8 +531,6 @@ int main(int argc, char *argv[]) {
 	
       }
       
-      update_game(&game, pn, strbuf);
-
       apply_game2(&game);
       
       assert(game.wh.king);
