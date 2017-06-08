@@ -14,6 +14,8 @@
 
 #include "ml.h"
 
+#include "gameset.h"
+
 #include "show_bitmask.h"
 
 uint64_t bmatch_pawn = 0b0000000010000000100000000000000000000000000000000000000000000000;
@@ -42,21 +44,11 @@ int main(int argc, char *argv[]) {
     perror("malloc");
     return -1;
   }
+
+  retval = gameset(&game);
   
-  game.wh.pawns = piecemask_wpawn;
-  game.wh.rooks = piecemask_wrook;
-  game.wh.bishops = piecemask_wbishop;
-  game.wh.knights = piecemask_wknight;
-  game.wh.king = piecemask_wking;
-  game.wh.queens = piecemask_wqueen;
-
-  game.bl.pawns = piecemask_bpawn;
-  game.bl.rooks = piecemask_brook;
-  game.bl.bishops = piecemask_bbishop;
-  game.bl.knights = piecemask_bknight;
-  game.bl.king = piecemask_bking;
-  game.bl.queens = piecemask_bqueen;
-
+  retval = apply_game2(&game);
+  
   base->next = NULL;
     
   totalpop = total_population(&game.wh, &game.bl);
@@ -66,13 +58,13 @@ int main(int argc, char *argv[]) {
 
   for (file = 0; file < 8; file ++) {
 
-    bpawn = game.bl.pawns & (1UL << (55 - file));
+    bpawn = game.bl2.pawns[file];
 
     pawnmove = movement_bpawn(bpawn, totalpop, cs_white);
 
     show_bitmask(pawnmove);
     
-    retval = add_mlspecific(base, bpawn, pawnmove, BPAWN);
+    retval = add_mlspecific(base, game.bl2.pawns+file, pawnmove, BPAWN);
       
   }
 
