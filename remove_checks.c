@@ -49,6 +49,11 @@ int remove_checks(basegame_t *game, long int ptype, struct ml *base, long int mo
   
   while (pn!=NULL) {
 
+    if (pn->ptype == ptype) {
+      pn = pn->next;
+      continue;
+    }
+    
     printf("pn=%p incheck_count=%ld counter=%ld\n", pn, incheck_count, counter);
     
     updated.wh = game->wh;
